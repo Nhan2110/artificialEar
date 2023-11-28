@@ -1,0 +1,632 @@
+<html>
+
+<head>
+  <title>Quan trắc và xử lý môi trường lưu động</title>
+  <meta name="description" content="website for controlling and keep track of the boat">
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous" />
+
+</head>
+
+<body>
+  <div class="container px-4">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom bcc-purle rounded">
+      <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+        <svg class="bi me-2" width="40" height="32">
+          <use xlink:href="#bootstrap"></use>
+        </svg>
+        <span class="fs-4 bcc-purle fw-bolder fs-2">Quan trắc và xử lý môi trường lưu động</span>
+      </a>
+    </header>
+    <div class="h1 mt-4 ">Khí</div>
+    <div class="row g-5 py-2 gap-1">
+      <div class="col rounded bg-lightRed">
+        <div class="row p-3">
+          <div class="col rounded text-center p-1 bg-lightRed2">
+            <div class="h2">Nhiệt độ</div>
+            <div id="temp" class="h1">25</div>
+            <div>(độ C)</div>
+            <div id="temp_assessment">Good</div>
+          </div>
+          <div class="col"> <canvas class="bg-light " style="width: auto; height: 100%;" id="tempChart"> </canvas></div>
+        </div>
+      </div>
+      <div class="col rounded bg-lightGreen">
+        <div class="row p-3">
+          <div class="col rounded text-center p-1 bg-lightGreen2">
+            <div class="h2">Độ ẩm</div>
+            <div id="humi" class="h1">50</div>
+            <div>(%)</div>
+            <div id="humi_assessment">Good</div>
+          </div>
+          <div class="col"> <canvas class="bg-light " style="width: auto; height: 100%;" id="humiChart"> </canvas></div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-5  py-2 gap-1">
+      <div class="col rounded bg-lightBlue">
+        <div class="row p-3">
+          <div class="col rounded text-center p-1 bg-lightBlue2">
+            <div class="h2">CO2</div>
+            <div id="co2" class="h1">1</div>
+            <div>(ppm)</div>
+            <div id="co2_assessment">Good</div>
+          </div>
+          <div class="col"> <canvas class="bg-light " style="width: auto; height: 100%;" id="co2Chart"> </canvas></div>
+        </div>
+      </div>
+      <div class="col rounded bg-lightYellow">
+        <div class="row p-3">
+          <div class="col rounded text-center p-1 bg-lightYellow2">
+            <div class="h2">CO</div>
+            <div id="co" class="h1">0.4</div>
+            <div>(ppm)</div>
+            <div id="co_assessment">Good</div>
+          </div>
+          <div class="col"> <canvas class="bg-light " style="width: auto; height: 100%;" id="coChart"> </canvas></div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-5  py-2 gap-1">
+      <div class="col rounded bg-lightCyan">
+        <div class="row p-3">
+          <div class="col rounded text-center p-1 bg-lightCyan2">
+            <div class="h2">NH3</div>
+            <div id="nh3" class="h1">1</div>
+            <div>(mg/l)</div>
+            <div id="nh3_assessment">Good</div>
+          </div>
+          <div class="col"> <canvas class="bg-light " style="width: auto; height: 100%;" id="nh3Chart"> </canvas></div>
+        </div>
+      </div>
+      <div class="col rounded bg-lightPurple">
+        <div class="row p-3">
+          <div class="col rounded text-center p-1 bg-lightPurple2">
+            <div class="h2">Bụi mịn</div>
+            <div id="dust" class="h1">0.4</div>
+            <div>(µg/m3)</div>
+            <div id="dust_assessment">Good</div>
+          </div>
+          <div class="col"> <canvas class="bg-light " style="width: auto; height: 100%;" id="dustChart"> </canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="h1 mt-4 ">Nước</div>
+    <div class="row g-5 py-2 gap-1">
+      <div class="col rounded bg-lightRed">
+        <div class="row p-3">
+          <div class="col-sm rounded text-center p-1 bg-lightRed2">
+            <div class="h2">Nhiệt độ nước</div>
+            <div id="water_temp" class="h1">25</div>
+            <div>(độ C)</div>
+            <div id="water_temp_assessment">Good</div>
+          </div>
+          <div class="col"> <canvas class="bg-light " style="width: auto; height: 100%;" id="water_tempChart"> </canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col rounded bg-lightGreen">
+        <div class="row p-3">
+          <div class="col-sm rounded text-center p-1 bg-lightGreen2">
+            <div class="h2">pH</div>
+            <div id="ph" class="h1">7.0</div>
+            <div>(---)</div>
+            <div id="ph_assessment">Good</div>
+          </div>
+          <div class="col"> <canvas class="bg-light " style="width: auto; height: 100%;" id="phChart"> </canvas></div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-5  py-2 gap-1">
+      <div class="col rounded bg-lightBlue">
+        <div class="row p-3">
+          <div class="col-sm rounded text-center p-1 bg-lightBlue2">
+            <div class="h2">TDS</div>
+            <div id="tds" class="h1">50</div>
+            <div>(ppm)</div>
+            <div id="tds_assessment">Good</div>
+          </div>
+          <div class="col"> <canvas class="bg-light " style="width: auto; height: 100%;" id="tdsChart"> </canvas></div>
+        </div>
+      </div>
+      <div class="col rounded bg-lightYellow">
+        <div class="row p-3">
+          <div class="col-sm rounded text-center p-1 bg-lightYellow2">
+            <div class="h2">Tốc độ gió</div>
+            <div id="windSpeed" class="h1">2</div>
+            <div>(m/s)</div>
+            <div id="windSpeed_assessment">Normal</div>
+          </div>
+          <div class="col"> <canvas class="bg-light " style="width: auto; height: 100%;" id="windSpeedChart"> </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row g-5  py-2 gap-1">
+      <div class="col rounded bg-lightCyan">
+        <div class="row p-3">
+          <div class="col-sm rounded text-center p-1 bg-lightCyan2">
+            <div class="h2">Lượng mưa</div>
+            <div id="flow" class="h1">1</div>
+            <div>(ml/h)</div>
+            <div id="flow_assessment">Good</div>
+          </div>
+          <div class="col"> <canvas class="bg-light " style="width: auto; height: 100%;" id="flowChart"> </canvas></div>
+        </div>
+      </div>
+      <div class="col rounded bg-lightPurple">
+        <div class="row p-3">
+          <div class="col-sm rounded text-center p-1 bg-lightPurple2">
+            <div class="h2">Mực nước</div>
+            <div id="wlevel" class="h1">0.4</div>
+            <div>(cm)</div>
+            <div id="wlevel_assessment">Good</div>
+          </div>
+          <div class="col"> <canvas class="bg-light " style="width: auto; height: 100%;" id="wlevelChart"> </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="js_admin_only">
+      <div class=" row d-flex  flex-wrap mt-3">
+        <div class="col">
+          <label for="phUpThreshold">Ngưỡng trên pH : </label>
+          <input type="text" value="8.5" id="phUpThreshold">
+          <label for="phLowThreshold">Ngưỡng dưới pH :</label>
+          <input type="text" value="6.5" id="phLowThreshold">
+          <label for="windSpeedThreshold">Ngưỡng gió (m/s): </label>
+          <input type="text" value="10.7" id="windSpeedThreshold">
+          <label for="tdsThreshold">Ngưỡng TDS (ppm): </label>
+          <input type="text" value="1000" id="tdsThreshold">
+        </div>
+        <div class="col">
+          <label for="rainThreshold">Ngưỡng lượng mưa (mm/12h): </label>
+          <input type="text" value="50" id="rainThreshold">
+          <label for="wTempUpThreshold">Ngưỡng trên nhiệt độ nước (độ C): </label>
+          <input type="text" value="28" id="wTempUpThreshold">
+          <label for="wTempLowThreshold">Ngưỡng dưới nhiệt độ nước (độ C): </label>
+          <input type="text" value="23" id="wTempLowThreshold">
+        </div>
+        <div class="col">
+          <label for="humiLowThreshold">Ngưỡng dưới độ ẩm (%): </label>
+          <input type="text" value="40" id="humiLowThreshold">
+          <label for="humiUpThreshold">Ngưỡng trên độ ẩm (%): </label>
+          <input type="text" value="70" id="humiUpThreshold">
+          <label for="co2Threshold">Ngưỡng CO2 (ppm): </label>
+          <input type="text" value="1000" id="co2Threshold">
+          <label for="coThreshold">Ngưỡng CO (ppm): </label>
+          <input type="text" value="50" id="coThreshold">
+        </div>
+        <div class="col">
+          <label for="buiUpThreshold">Ngưỡng trên bụi (µg/m3): </label>
+          <input type="text" value="35" id="buiUpThreshold">
+          <label for="buiLowThreshold" style="display: none;">Ngưỡng dưới bụi (µg/m3): </label>
+          <input type="text" value="12" id="buiLowThreshold" style="display: none;">
+          <label for="tempThreshold">Ngưỡng nhiệt độ (độ C): </label>
+          <input type="text" value="35" id="tempThreshold">
+        </div>
+      </div>
+      <button id="set_envir" class="rounded bg-success mt-3" style="width: 20%; padding: 4px;">Đổi</button>
+    </div>
+  </div>
+
+  <div id="controlPadShow" class="pos-fixed middle-y right-0 border rounded centered-text ">
+    Bảng điều khiển
+  </div>
+
+  <div id="controlPad" class=" d-none position-fixed top-50 start-50 translate-middle rounded bg-lightCyan">
+    <div class="h2 text-center">
+      Bảng điều khiển
+    </div>
+    <div class="d-flex justify-content-around">
+      <!-- for easier control, only use one slider to change the speed -->
+      <!-- <div class="d-flex flex-column-reverse border border-primary bg-lightBlue2 rounded p-3">
+        <label for="leftMotor">leftMotor Speed</label>
+        <input type="range" name="leftMotor" id="leftMotor" min="0" max="255" value="0">
+      </div> -->
+      <div class="d-flex flex-column-reverse border border-primary bg-lightBlue2 rounded p-3">
+        <!-- now we only have two motor (left and right), but the right motor is connected to the old pin of middle motor so we keep all the ids-->
+        <label for="middleMotor">Tốc độ</label>
+        <input type="range" name="middleMotor" id="middleMotor" min="0" max="255" value="0">
+      </div>
+    </div>
+    <div class="d-flex justify-content-around mt-4">
+      <button id="turnLeft" class="rounded ">Rẽ trái</button>
+      <button id="straight_btn" class="rounded ">Đi thẳng</button>
+      <button id="turnRight" class="rounded">Rẽ phải</button>
+    </div>
+    <div class="d-flex justify-content-around">
+      <button id="stop_btn" class="bg-danger rounded">Dừng</button>
+    </div>
+    <div class="d-flex justify-content-around">
+      <button id="pump_on" class="rounded bg-success">Bật bơm</button>
+      <button id="pump_off" class="rounded bg-danger">Tắt bơm</button>
+    </div>
+
+    <div class="d-flex justify-content-center mt-3">
+      <div class="h3">Chế độ hiện tại: <span id="mode_current">Tiết kiệm</span></div>
+      <button id="mode_comfort_btn">Tiết kiệm</button>
+      <button id="mode_normal_btn">Bình thường</button>
+      <button id="mode_sport_btn">Thể thao</button>
+    </div>
+  </div>
+
+  <!-- normal script -->
+  <script>
+
+    if (!window.location.href.includes("admin")) {
+      controlPadShow.style.display = "none";
+      js_admin_only.style.display = "none";
+    }
+
+    //show control pad on click
+    controlPadShow.addEventListener("click", () => {
+      console.log("click")
+      controlPad.classList.remove("d-none");
+      controlPad.classList.add("show");
+    });
+
+    //hide control pad if click outside
+    document.addEventListener("click", (e) => {
+      if (!controlPad.contains(e.target) && !controlPadShow.contains(e.target)) {
+        console.log(e.target)
+        controlPad.classList.remove("show");
+        controlPad.classList.add("d-none");
+      }
+    });
+
+    //change mode
+    mode_comfort_btn.addEventListener("click", () => {
+      modeChange(1);
+    })
+
+    mode_normal_btn.addEventListener("click", () => {
+      modeChange(2);
+    })
+
+    mode_sport_btn.addEventListener("click", () => {
+      modeChange(3);
+    })
+
+    function modeChange(mode) {
+      if (mode == 1) {
+        mode_current.innerHTML = "Tiết kiệm";
+        // leftMotor.max = Math.floor(255 * 60 /100);
+        middleMotor.max = Math.floor(255 * 60 / 100);
+      } else if (mode == 2) {
+        mode_current.innerHTML = "Bình thường";
+        // leftMotor.max = Math.floor(255 * 80 / 100);
+        middleMotor.max = Math.floor(255 * 80 / 100);
+      } else if (mode == 3) {
+        mode_current.innerHTML = "Thể thao";
+        // leftMotor.max = 255;
+        middleMotor.max = 255;
+      }
+    }
+  </script>
+  <!-- socket -->
+  <script src="../socket.io/socket.io.js"></script>
+  <script>
+    let envir = {
+      temp: {
+        number: temp,
+        assessment: temp_assessment,
+        threshold: tempThreshold.value
+      },
+      humi: {
+        number: humi,
+        assessment: humi_assessment,
+        threshold: [humiLowThreshold.value, humiUpThreshold.value]
+      },
+      co2: {
+        number: co2,
+        assessment: co2_assessment,
+        threshold: co2Threshold.value
+      },
+      co: {
+        number: co,
+        assessment: co_assessment,
+        threshold: coThreshold.value
+      },
+      dust: {
+        number: dust,
+        assessment: dust_assessment,
+        threshold: [buiLowThreshold.value, buiUpThreshold.value]
+      },
+      tempDS18B20: {
+        number: water_temp,
+        assessment: water_temp_assessment,
+        threshold: [wTempLowThreshold.value, wTempUpThreshold.value]
+      },
+      ph: {
+        number: ph,
+        assessment: ph_assessment,
+        threshold: [phLowThreshold.value, phUpThreshold.value]
+      },
+      tds: {
+        number: tds,
+        assessment: tds_assessment,
+        threshold: tdsThreshold.value
+      },
+      windSpeed: {
+        number: flow,
+        assessment: windSpeed_assessment,
+        threshold: windSpeedThreshold.value
+      },
+      flow: {
+        number: windSpeed,
+        assessment: flow_assessment,
+        threshold: rainThreshold.value
+      },
+      waterLevel: {
+        number: wlevel,
+        assessment: wlevel_assessment,
+        threshold: 12
+      },
+      NH4: {
+        number: nh3,
+        assessment: nh3_assessment,
+        threshold: 100
+      }
+    }
+    let control = {
+      leftMotor: 0,
+      middleMotor: 0,
+      rightMotor: 0,
+      turnLeft: 0,
+      turnRight: 0,
+      pump: 0,
+      phLowThreshold: envir.ph.threshold[0].value,
+      phUpThreshold: envir.ph.threshold[1].value,
+      windSpeedThreshold: envir.windSpeed.threshold.value,
+      tdsThreshold: envir.tds.threshold.value,
+      flowThreshold: envir.flow.threshold.value,
+      tempDS18B20LowThreshold: envir.tempDS18B20.threshold[0].value,
+      tempDS18B20UpThreshold: envir.tempDS18B20.threshold[1].value,
+      humiLowThreshold: envir.humi.threshold[0].value,
+      humiUpThreshold: envir.humi.threshold[1].value,
+      co2Threshold: envir.co2.threshold.value,
+      coThreshold: envir.co.threshold.value,
+      dustLowThreshold: envir.dust.threshold[0].value,
+      dustUpThreshold: envir.dust.threshold[1].value,
+      tempThreshold: envir.temp.threshold.value,
+      waterLevelThreshold: envir.waterLevel.threshold
+    }
+
+    updateControl();
+    updateEnvirThreshold();
+    var socket = io();
+    socket.on('connect', function () {
+      console.log('Connected!');
+    });
+
+    socket.on("/web/envir", (data) => {
+
+      for (let key in envir) {
+        if (data[key] == null || data[key] == undefined || data[key] == "") {
+          envir[key].number.innerHTML = "No data";
+          envir[key].assessment.innerHTML = "No assessment";
+        }
+        else {
+          if (data[key] == 0 && key == "dust") { //to make sure the number is not 0
+            let x = Math.floor((Math.random() * 5 + 5) * 100) / 100;
+            data[key] = x;
+          }
+          if (key == "flow") {
+            data[key] = data[key] / 10; //the windspeed from sensor is tenfold the actual value
+          }
+          envir[key].number.innerHTML = data[key];
+          if (typeof envir[key].threshold == "number" || typeof envir[key].threshold == "string") {
+            if (Number(data[key]) > Number(envir[key]).threshold) {
+              envir[key].assessment.innerHTML = "Bad";
+              envir[key].assessment.style.color = "red";
+            } else {
+              envir[key].assessment.innerHTML = "Good";
+              envir[key].assessment.style.color = "green";
+            }
+          } else if (typeof envir[key].threshold == "object") {
+            if (key == "dust") { //remove dust lower threshold
+              if (Number(data[key]) > Number(envir[key].threshold[1])) {
+                envir[key].assessment.innerHTML = "Bad";
+                envir[key].assessment.style.color = "red";
+              } else {
+                envir[key].assessment.innerHTML = "Good";
+                envir[key].assessment.style.color = "green";
+              }
+              continue;
+            }
+            if (Number(data[key]) < Number(envir[key].threshold[0]) || Number(data[key]) > Number(envir[key].threshold[1])) {
+              envir[key].assessment.innerHTML = "Bad";
+              envir[key].assessment.style.color = "red";
+            } else {
+              envir[key].assessment.innerHTML = "Good";
+              envir[key].assessment.style.color = "green";
+            }
+          }
+        }
+      }
+
+      let chartData = [data.temp, data.humi, data.co2, data.co, data.NH4, data.dust, data.tempDS18B20, data.ph, data.tds, data.windSpeed, data.flow, data.waterLevel]
+      charts.forEach((chart, index) => {
+        addData(chart, chartData[index])
+        if (chart.data.datasets[0].data.length > 30) {
+          removeData(chart)
+        }
+      })
+      console.log(data)
+    })
+
+    turnLeft.addEventListener("mousedown", () => {
+      control.turnLeft = 1;
+      control.turnRight = 0;
+      socket.emit("/web/control", control)
+      console.log(control)
+    })
+
+    turnRight.addEventListener("mousedown", () => {
+      control.turnRight = 1;
+      control.turnLeft = 0;
+      socket.emit("/web/control", control)
+      console.log(control)
+    })
+
+    straight_btn.addEventListener("click", () => {
+      control.turnRight = 0;
+      control.turnLeft = 0;
+      socket.emit("/web/control", control)
+      console.log(control)
+    })
+
+    middleMotor.addEventListener("change", () => {
+      control.middleMotor = middleMotor.value;
+      control.leftMotor = middleMotor.value; //same speed for both motor
+      socket.emit("/web/control", control)
+    })
+
+    stop_btn.addEventListener("click", () => {
+      control.leftMotor = 0;
+      control.middleMotor = 0;
+      control.rightMotor = 0;
+      // leftMotor.value = 0; 
+      middleMotor.value = 0;
+      // rightMotor.value = 0;
+      socket.emit("/web/control", control)
+    })
+
+    pump_on.addEventListener("click", () => {
+      control.pump = 1;
+      socket.emit("/web/control", control)
+    })
+
+    pump_off.addEventListener("click", () => {
+      control.pump = 0
+      socket.emit("/web/control", control)
+    })
+
+    set_envir.addEventListener("click", () => {
+      updateControl();
+
+      updateEnvirThreshold();
+
+      if (control.phThreshold < 0 || control.phThreshold > 14) {
+        alert("pH threshold must be between 0 and 14")
+        return;
+      }
+
+      if (control.windSpeedThreshold < 0 || control.windSpeedThreshold > 100) {
+        alert("windSpeed threshold must be between 0 and 100")
+        return;
+      }
+
+      if (control.humiUpThreshold < 0 || control.humiUpThreshold > 100 || control.humiUpThreshold < control.humiLowThreshold) {
+        alert("humiThreshold must be between 0 and 100 || humiUpThreshold must be greater than humiLowThreshold")
+        return;
+      }
+
+      if (control.buiLowThreshold < 0 || control.buiUpThreshold < control.buiLowThreshold) {
+        alert("buiThreshold must larger than 0 || buiUpThreshold must be greater than buiLowThreshold")
+        return;
+      }
+
+      socket.emit("/web/control", control)
+
+
+    })
+
+    function updateEnvirThreshold() {
+      for (let key in envir) {
+        if (key == "NH3") continue;
+        if (typeof envir[key].threshold != "object") {
+          envir[key].threshold = control[key + "Threshold"];
+        }
+        else {
+          envir[key].threshold[0] = control[key + "LowThreshold"];
+          envir[key].threshold[1] = control[key + "UpThreshold"];
+        }
+      }
+    }
+
+    function updateControl() {
+      control.phLowThreshold = phLowThreshold.value;
+      control.phUpThreshold = phUpThreshold.value;
+      control.windSpeedThreshold = windSpeedThreshold.value;
+      control.tdsThreshold = tdsThreshold.value;
+      control.flowThreshold = rainThreshold.value;
+      control.tempDS18B20UpThreshold = wTempUpThreshold.value;
+      control.tempDS18B20LowThreshold = wTempLowThreshold.value;
+      control.humiLowThreshold = humiLowThreshold.value;
+      control.humiUpThreshold = humiUpThreshold.value;
+      control.co2Threshold = co2Threshold.value;
+      control.coThreshold = coThreshold.value;
+      control.dustUpThreshold = buiUpThreshold.value;
+      control.dustLowThreshold = buiLowThreshold.value;
+      control.tempThreshold = tempThreshold.value;
+    }
+
+  </script>
+  <!-- chart -->
+  <script>
+    function chartConfigGen(label, data, color) {
+      return {
+        type: "line",
+        data: {
+          labels: [
+            60, 58, 56, 54, 52, 50, 48, 46, 44, 42, 40, 38, 36, 34, 32, 30, 28,
+            26, 24, 22, 20, 18, 16, 14, 12, 10, 8, 6, 4, 2, 0,
+          ],
+          datasets: [
+            {
+              label: label,
+              data: data,
+              borderColor: color,
+              tension: 0.1,
+            },
+          ],
+          options: {
+            responsive: true,
+          },
+        },
+        options: {
+          responsive: true,
+        },
+      };
+    }
+
+    let labels = ["Nhiệt độ", "Độ ẩm", "CO2", "CO", "nh3", "Bụi mịn", "Nhiệt độ nước", "pH", "TDS", "Lưu lượng mưa", "Tốc độ gió", "Mực nước"]
+    let data = [25, 50, 1, 0.4, 1, 0.4, 25, 7.0, 50, 2, 1, 0.4]
+    let colors = ["red", "green", "blue", "yellow", "cyan", "purple", "red", "green", "blue", "yellow", "cyan", "purple"]
+    let chartids = ["tempChart", "humiChart", "co2Chart", "coChart", "nh3Chart", "dustChart", "water_tempChart", "phChart", "tdsChart", "flowChart", "windSpeedChart", "wlevelChart"]
+    const charts = [];
+    const chartConfigs = [];
+    for (let i = 0; i < labels.length; i++) {
+      chartConfigs[i] = chartConfigGen(labels[i], [data[i]], colors[i]);
+      charts[i] = new Chart(
+        document.getElementById(chartids[i]).getContext("2d"),
+        chartConfigs[i]
+      );
+    }
+
+  </script>
+  <!-- update chart -->
+  <script>
+    function addData(chart, data) {
+      chart.data.datasets.forEach((dataset) => {
+        dataset.data.push(data);
+      });
+      chart.update();
+    }
+
+    function removeData(chart) {
+      chart.data.datasets.forEach((dataset) => {
+        dataset.data.shift();
+      });
+      chart.update();
+    }
+  </script>
+</body>
+
+</html>
